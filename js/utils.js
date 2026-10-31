@@ -25,8 +25,6 @@ function canBuyBuyable(layer, id) {
 	return (b.unlocked && run(b.canAfford, b) && player[layer].buyables[id].lt(b.purchaseLimit) && !tmp[layer].deactivated)
 }
 
-
-
 function canAffordPurchase(layer, thing, cost) {
 	if (thing.currencyInternalName) {
 		let name = thing.currencyInternalName
@@ -56,6 +54,7 @@ function buyUpg(layer, id) {
 	if (!player[layer].unlocked || player[layer].deactivated) return
 	if (!tmp[layer].upgrades[id].unlocked) return
 	if (player[layer].upgrades.includes(id)) return
+	if (layers[layer].upgrades[id].repairClick && layers[layer].upgrades[id].repairClick()) return
 	if (upg.canAfford === false) return
 	let pay = layers[layer].upgrades[id].pay
 	if (pay !== undefined)
@@ -273,7 +272,7 @@ function updateAchievements(layer) {
 		if (isPlainObject(layers[layer].achievements[id]) && !(hasAchievement(layer, id)) && layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(id)
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete()
-			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup("achievement", tmp[layer].achievements[id].name, "Achievement Gotten!", 3, tmp[layer].color);
+			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup("achievement", run(layers[layer].achievements[id].name, layers[layer].achievements[id]), "Achievement Gotten!", 3, tmp[layer].color);
 		}
 	}
 }

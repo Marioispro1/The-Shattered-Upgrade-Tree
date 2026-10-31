@@ -160,8 +160,6 @@ function layerDataReset(layer, keep = []) {
 	}
 }
 
-
-
 function addPoints(layer, gain) {
 	player[layer].points = player[layer].points.add(gain).max(0)
 	if (player[layer].best) player[layer].best = player[layer].best.max(player[layer].points)
@@ -342,7 +340,9 @@ function gameLoop(diff) {
 		if(diff > limit)
 			diff = limit
 	}
+	if (introActive()) diff = 0
 	addTime(diff)
+	diff *= timeFlow()
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
 
 	for (let x = 0; x <= maxRow; x++){

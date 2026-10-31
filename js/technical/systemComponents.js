@@ -4,7 +4,7 @@ var systemComponents = {
 		template: `
 			<div class="upgRow">
 				<div v-for="tab in Object.keys(data)">
-					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked" v-bind:class="{tabButton: true, notify: subtabShouldNotify(layer, name, tab), resetNotify: subtabResetNotify(layer, name, tab)}"
+					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked" v-bind:class="{tabButton: true, activeTab: player.subtabs[layer][name] === tab, notify: subtabShouldNotify(layer, name, tab), resetNotify: subtabResetNotify(layer, name, tab)}"
 					v-bind:style="[{'border-color': tmp[layer].color}, (subtabShouldNotify(layer, name, tab) ? {'box-shadow': 'var(--hqProperty2a), 0 0 20px '  + (data[tab].glowColor || defaultGlow)} : {}), tmp[layer].componentStyles['tab-button'], data[tab].buttonStyle]"
 						v-on:click="function(){player.subtabs[layer][name] = tab; updateTabFormats(); needCanvasUpdate = true;}">{{tab}}</button>
 				</div>
@@ -104,7 +104,7 @@ var systemComponents = {
 
 	'overlay-head': {
 		template: `			
-		<div class="overlayThing" style="padding-bottom:7px; width: 90%; z-index: 1000; position: relative">
+		<div class="overlayThing headBar" style="padding-bottom:7px; width: 90%; z-index: 1000; position: relative">
 		<span v-if="player.devSpeed && player.devSpeed != 1" class="overlayThing">
 			<br>Dev Speed: {{format(player.devSpeed)}}x<br>
 		</span>
@@ -173,6 +173,7 @@ var systemComponents = {
 				</tr> 
 			<tr>
                 <td><button class="opt" onclick="toggleOpt('hideMilestonePopups')">Show Milestone Popups: {{ formatOption(!options.hideMilestonePopups) }}</button></td>
+                <td><button class="opt" onclick="toggleOpt('reduceTextEffects')">Reduce text effects: {{ formatOption(options.reduceTextEffects) }}</button></td>
             </tr>
         </table>`
     },
